@@ -18,6 +18,9 @@ use ggez::graphics;
 use std::env;
 use std::path;
 
+// Our modules, define actual content
+mod world;
+
 
 /// Function to set up logging.
 /// We write ALL debug messages (which will be a log)
@@ -67,7 +70,8 @@ pub struct MainState {} // @TODO: Fill this up!
 
 // @TODO: Stubs only for now
 impl MainState {
-    pub fn new() -> GameResult<MainState> {
+    pub fn new(asset_dir: Option<path::PathBuf>, ctx: &mut Context) -> GameResult<MainState> {
+        let world = world::World::new(ctx, asset_dir.clone());
         Ok(MainState {})
     }
 }
@@ -76,8 +80,7 @@ impl EventHandler for MainState {
     fn update(&mut self, ctx: &mut Context) -> GameResult {
         Ok(())
     }
-
-    fn draw(&mut self, ctx: &mut Context) -> GameResult {
+fn draw(&mut self, ctx: &mut Context) -> GameResult {
         graphics::clear(ctx, graphics::WHITE);
         graphics::present(ctx);
         Ok(())
@@ -101,11 +104,11 @@ pub fn main() -> GameResult {
     let cb = ggez::ContextBuilder::new("game-template", "ggez")
         //.window_setup(conf::WindowSetup::default().title("game-template"))
         //.window_mode(conf::WindowMode::default().dimensions(800.0, 600.0))
-        .add_resource_path(asset_dir);
+        .add_resource_path(&asset_dir);
 
 
     let (ctx, event_loop) = &mut cb.build()?;
-    let state = &mut MainState::new()?;
+    let state = &mut MainState::new(Some(asset_dir), ctx)?;
 
     event::run(ctx, event_loop, state)
 }
