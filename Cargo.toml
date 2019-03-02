@@ -8,6 +8,7 @@ edition = "2018"
 # Game stuff
 ggez = { git="https://github.com/ggez/ggez.git", branch="master" }
 warmy = "0.11.1"
+ggez-goodies = { git = "https://github.com/ggez/ggez-goodies", branch = "master" }
 
 # Utility stuff
 log = "0.4.6"

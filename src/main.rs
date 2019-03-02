@@ -7,6 +7,10 @@ extern crate log;
 extern crate fern;
 extern crate chrono;
 
+// Error
+#[macro_use]
+extern crate failure;
+
 // GGEZ
 use ggez::*;
 use ggez::event;
@@ -20,6 +24,10 @@ use std::path;
 
 // Our modules, define actual content
 mod world;
+
+// Utility Modules
+//mod error;
+mod assets;
 
 
 /// Function to set up logging.
