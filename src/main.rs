@@ -10,8 +10,12 @@ extern crate chrono;
 // GGEZ
 use ggez::*;
 use ggez::event;
+use ggez::event::*;
+use ggez::graphics;
+
 
 // Std stuff
+use std::env;
 use std::path;
 
 
@@ -54,35 +58,54 @@ fn setup_logger() -> Result<(), fern::InitError> {
         Ok(())
 }
 
+/// @TODO: Split states for loading, menu, etc
+/// Main game state. This holds all our STUFF
+/// but most of the actual game data are in `Scenes`,
+/// and the `FSceneStack` contains them
+/// plus global game state.
+pub struct MainState {} // @TODO: Fill this up!
 
-pub fn main() {
-    setup_logger().expect("Could not set up logging!");
-    
-    // Setup the context builder
-    let mut cb = ContextBuilder::new("game-template", "ggez")
-        .window_setup(conf::WindowSetup::default().title("game-template"))
-        .window_mode(conf::WindowMode::default().dimension(800, 600));
-    
-    // We ad the CARGO_MANIFEST_DIR/assets to the filesystems path so
-    // we look in the cargo project for files.
-    // And save it so we can feed the result to warmy.
-    let cargo_path: Option<path::PathBuf> = option_env!("CARGO_MANIFEST_DIR")
-        .map(|env_path| {
-            let mut asset_path = path::PathBuf::from(env_path);
-            asset_path.push("assets");
-            asset_path
-        });
-    
-    // If we have such a path then add it to the context builder too
-    // @NOTE: Modifying the CB from inside a closure gets sticky
-    if let Some(ref s) = cargo_path {
-        cb = cb.add_resource_path(s);
+// @TODO: Stubs only for now
+impl MainState {
+    pub fn new() -> GameResult<MainState> {
+        Ok(MainState {})
+    }
+}
+
+impl EventHandler for MainState {
+    fn update(&mut self, ctx: &mut Context) -> GameResult {
+        Ok(())
     }
 
-    let ctx = &mut cb.build().unwrap();
+    fn draw(&mut self, ctx: &mut Context) -> GameResult {
+        graphics::clear(ctx, graphics::WHITE);
+        graphics::present(ctx);
+        Ok(())
+    }
+}
 
-    let state = &mut MainState::new(cargo_path, ctx);
 
-    if let Err(e) = event::
 
+pub fn main() -> GameResult {
+    setup_logger().expect("Could not set up logging!");
+
+    let asset_dir = if let Ok(manifest_dir) = env::var("CARGO_MANIFEST_DIR") {
+        let mut path = path::PathBuf::from(manifest_dir);
+        path.push("assets");
+        path
+    } else {
+        path::PathBuf::from("./assets")
+    };
+    
+    // Setup the context builder
+    let cb = ggez::ContextBuilder::new("game-template", "ggez")
+        //.window_setup(conf::WindowSetup::default().title("game-template"))
+        //.window_mode(conf::WindowMode::default().dimensions(800.0, 600.0))
+        .add_resource_path(asset_dir);
+
+
+    let (ctx, event_loop) = &mut cb.build()?;
+    let state = &mut MainState::new()?;
+
+    event::run(ctx, event_loop, state)
 }
