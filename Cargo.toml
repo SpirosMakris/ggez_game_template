@@ -5,3 +5,12 @@ authors = ["Spiros Makris <makris.spiros@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+# Game stuff
+ggez = { git="https://github.com/ggez/ggez.git", branch="master" }
+
+
+# Utility stuff
+log = "0.4.6"
+fern =  { version = "0.5.7", features = ["colored"] }
+chrono = "0.4.6"
+failure = "0.1.5"
