@@ -9,6 +9,10 @@ extern crate chrono;
 
 // GGEZ
 use ggez::*;
+use ggez::event;
+
+// Std stuff
+use std::path;
 
 
 /// Function to set up logging.
@@ -54,5 +58,31 @@ fn setup_logger() -> Result<(), fern::InitError> {
 pub fn main() {
     setup_logger().expect("Could not set up logging!");
     
-    let mut cb = ContextBuilder
+    // Setup the context builder
+    let mut cb = ContextBuilder::new("game-template", "ggez")
+        .window_setup(conf::WindowSetup::default().title("game-template"))
+        .window_mode(conf::WindowMode::default().dimension(800, 600));
+    
+    // We ad the CARGO_MANIFEST_DIR/assets to the filesystems path so
+    // we look in the cargo project for files.
+    // And save it so we can feed the result to warmy.
+    let cargo_path: Option<path::PathBuf> = option_env!("CARGO_MANIFEST_DIR")
+        .map(|env_path| {
+            let mut asset_path = path::PathBuf::from(env_path);
+            asset_path.push("assets");
+            asset_path
+        });
+    
+    // If we have such a path then add it to the context builder too
+    // @NOTE: Modifying the CB from inside a closure gets sticky
+    if let Some(ref s) = cargo_path {
+        cb = cb.add_resource_path(s);
+    }
+
+    let ctx = &mut cb.build().unwrap();
+
+    let state = &mut MainState::new(cargo_path, ctx);
+
+    if let Err(e) = event::
+
 }
