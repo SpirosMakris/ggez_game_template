@@ -24,10 +24,12 @@ use std::path;
 
 // Our modules, define actual content
 mod world;
+mod scenes;
 
 // Utility Modules
 //mod error;
 mod assets;
+mod input;
 
 
 /// Function to set up logging.
@@ -74,12 +76,16 @@ fn setup_logger() -> Result<(), fern::InitError> {
 /// but most of the actual game data are in `Scenes`,
 /// and the `FSceneStack` contains them
 /// plus global game state.
-pub struct MainState {} // @TODO: Fill this up!
+pub struct MainState {
+    scenes: scenes::FSceneStack,
+    input_binding: input::InputBinding,
+}
 
-// @TODO: Stubs only for now
+
 impl MainState {
     pub fn new(asset_dir: Option<path::PathBuf>, ctx: &mut Context) -> GameResult<MainState> {
         let world = world::World::new(ctx, asset_dir.clone());
+        let mut scenestack = scenes::FSceneStack::new(ctx, world);
         Ok(MainState {})
     }
 }
