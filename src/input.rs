@@ -28,3 +28,4 @@ pub fn create_default_input_binding() -> input::InputBinding<Axis, Button> {
         .bind_key_to_button(KeyCode::Z, Button::Fire)
         .bind_key_to_button(KeyCode::Escape, Button::Menu)
 }
+

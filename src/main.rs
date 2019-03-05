@@ -17,6 +17,14 @@ use ggez::event;
 use ggez::event::*;
 use ggez::graphics;
 
+// Goodies package
+extern crate ggez_goodies;
+
+// SPECS
+extern crate specs;
+#[macro_use]
+extern crate specs_derive;
+
 
 // Std stuff
 use std::env;
@@ -25,11 +33,14 @@ use std::path;
 // Our modules, define actual content
 mod world;
 mod scenes;
+mod components;
+mod systems;
 
 // Utility Modules
 //mod error;
 mod assets;
 mod input;
+mod utils;
 
 
 /// Function to set up logging.
@@ -86,6 +97,7 @@ impl MainState {
     pub fn new(asset_dir: Option<path::PathBuf>, ctx: &mut Context) -> GameResult<MainState> {
         let world = world::World::new(ctx, asset_dir.clone());
         let mut scenestack = scenes::FSceneStack::new(ctx, world);
+
         Ok(MainState {})
     }
 }

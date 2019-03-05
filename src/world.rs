@@ -6,21 +6,26 @@
 
 use ggez;
 use ggez::nalgebra as na;
-//use ggez_goodies::input as ginput;
-//use specs;
-//use specs::Builder;
+use ggez_goodies::input as ginput;
+use specs;
+use specs::Builder;
 
 use warmy;
 
 use std::path;
 
+use crate::components::*;
+use crate::input;
+
 pub struct World {
     pub assets: warmy::Store<ggez::Context, warmy::SimpleKey>,
-    //@TODO: ++
+    pub input: input::InputState,
+    pub specs_world: specs::World,
 }
 
 impl World {
     fn register_components(&mut self) {
+        //@TODO: ++
     }
 
     pub fn new(ctx: &mut ggez::Context, resource_dir: Option<path::PathBuf>) -> Self {
@@ -37,12 +42,30 @@ impl World {
         let store_opt = warmy::StoreOpt::default().set_root(asset_pathbuf);
         let store = warmy::Store::new(store_opt)
             .expect("Could not create asset store! Does the directory exist?");
-        
+       
+        let w = specs::World::new();
+
         let the_world = Self {
             assets: store,
+            input: ginput::InputState::new(),
+            specs_world: w,
         };
 
         //@TODO: ++
+        the_world.register_components();
+        
+        // @TODO: -- Remove this
+        // Make a test entity
+        the_world
+            .specs_world
+            .create_entity()
+            .with(Position(na::Point2::new(0.0, 0.0)))
+            .with(Motion {
+                velocity: na::Vector2::new(1.0, 1.0),
+                acceleration: na::Vector2::new(0.0, 0.0),
+            })
+            .build();
+
         
         the_world
     }
