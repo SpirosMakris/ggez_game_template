@@ -110,10 +110,18 @@ impl MainState {
 
 impl EventHandler for MainState {
     fn update(&mut self, ctx: &mut Context) -> GameResult {
+        const DESIRED_FPS: u32 = 60;
+        while timer::check_update_time(ctx, DESIRED_FPS) {
+            self.scenes.update(ctx);
+        }
+
+        self.scenes.world.assets.sync(ctx);
+
         Ok(())
     }
 fn draw(&mut self, ctx: &mut Context) -> GameResult {
         graphics::clear(ctx, graphics::WHITE);
+        self.scenes.draw(ctx);
         graphics::present(ctx);
         Ok(())
     }
