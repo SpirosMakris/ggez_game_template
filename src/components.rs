@@ -1,20 +1,20 @@
 use ggez::graphics::*;
 use specs::*;
 use specs::storage::*;
-use ggez::nalgebra as na;
+use ggez::nalgebra::{Point2, Vector2};
 
 /// ////////////////////////////////
 /// Components
 /// ////////////////////////////////
 #[derive(Clone, Debug, Component)]
 #[storage(VecStorage)]
-pub struct Position(pub na::Point2<f32>);
+pub struct Position(pub Point2<f32>);
 
 #[derive(Clone, Debug, Component)]
 #[storage(VecStorage)]
 pub struct Motion {
-    pub velocity: na::Vector2<f32>,
-    pub acceleration: na::Vector2<f32>, }
+    pub velocity: Vector2<f32>,
+    pub acceleration: Vector2<f32>, }
 
 // Ust a marker that a particular entity is the player
 #[derive(Clone, Debug, Default, Component)]
@@ -30,12 +30,12 @@ pub struct Shot {
 #[derive(Clone, Debug, Component)]
 #[storage(HashMapStorage)]
 pub struct CBackgroundScroller {
-    pub scroll_speed: na::Vector2<f32>,
+    pub scroll_speed: Vector2<f32>,
 }
 
 impl CBackgroundScroller {
     pub fn new() -> Self {
-        CBackgroundScroller { scroll_speed: na::Vector2::new(0.0, -0.01) }
+        CBackgroundScroller { scroll_speed: Vector2::new(0.0, -0.01) }
     }
 }
 

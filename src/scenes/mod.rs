@@ -4,7 +4,7 @@ use crate::input;
 
 use crate::world::World;
 
-//pub mod level;
+pub mod level;
 
 // Shortcuts for our scene type
 pub type FSceneSwitch = scene::SceneSwitch<World, input::InputEvent>;

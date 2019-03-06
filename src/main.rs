@@ -97,8 +97,14 @@ impl MainState {
     pub fn new(asset_dir: Option<path::PathBuf>, ctx: &mut Context) -> GameResult<MainState> {
         let world = world::World::new(ctx, asset_dir.clone());
         let mut scenestack = scenes::FSceneStack::new(ctx, world);
+        let initial_scene = Box::new(scenes::level::LevelScene::new(ctx, &mut scenestack.world));
+        scenestack.push(initial_scene);
 
-        Ok(MainState {})
+
+        Ok(MainState {
+            scenes: scenestack,
+            input_binding: input::create_default_input_binding(),
+        })
     }
 }
 
